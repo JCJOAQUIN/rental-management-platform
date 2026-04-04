@@ -1,0 +1,15 @@
+services:
+  rentflow-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: rentflow-sql-server
+    ports:
+      - "1433:1433" # Puerto estándar de SQL Server
+    environment:
+      - ACCEPT_EULA=Y # Aceptar términos de licencia
+      - MSSQL_SA_PASSWORD=RentFlow_2026! # ¡Cambia esta clave después!
+      - MSSQL_PID=Developer
+    volumes:
+      - rentflow_sql_data:/var/opt/mssql
+
+volumes:
+  rentflow_sql_data:
