@@ -52,7 +52,7 @@ Algoritmo avanzado para la gestión de reservas que previene colisiones de fecha
 1. **Clonar el repositorio:**
    ```bash
    git clone [https://github.com/JCJOAQUIN/rental-management-platform.git](https://github.com/JCJOAQUIN/rental-management-platform.git)
-
+	```
 2. Levantar Infraestructura (DB) y Configuración de Seguridad
 
 Para garantizar la consistencia entre entornos y proteger las credenciales, seguimos este flujo:
@@ -63,23 +63,26 @@ Antes de iniciar, abre el archivo docker-compose.yml en la raíz. Si deseas camb
 Paso B: Levantar el Contenedor
 Ejecuta el siguiente comando para iniciar SQL Server 2022:
 
-Bash
+```Bash
 docker-compose up -d
+```
 
 Paso C: Configurar la Cadena de Conexión (User Secrets)
 
 Para que la API se comunique con el contenedor sin exponer la contraseña en Git, ejecutamos este comando dentro de la carpeta src/backend/RentFlow.API:
 
-Bash
+```Bash
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=RentFlowDb;User Id=sa;Password=<TU_CONTRASEÑA>;TrustServerCertificate=True;"
+```
 
 Asegúrate de que <TU_CONTRASEÑA> sea exactamente la misma que definiste en el Paso A.
 
 Paso D: Sincronizar Esquema (Migraciones)
 Crea las tablas en tu instancia local:
 
-Bash
+```Bash
 dotnet ef database update --project ../RentFlow.Infrastructure --startup-project .
+```
 
 3. Backend: Navegar a src/backend/RentFlow.API y ejecutar dotnet run.
 
