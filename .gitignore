@@ -7,7 +7,7 @@ obj/
 *.userosscache
 *.sln.docstates
 out/
-appsettings.Development.json
+appsettings.Example.json
 # (Opcional: ignora appsettings si prefieres usar variables de entorno)
 
 # === [ Angular / Node.js ] ===

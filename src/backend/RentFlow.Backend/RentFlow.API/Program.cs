@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using RentFlow.Infrastructure.Persistence;
 
 namespace RentFlow.API
 {
@@ -6,6 +8,10 @@ namespace RentFlow.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Registrar el DbContext
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
 
