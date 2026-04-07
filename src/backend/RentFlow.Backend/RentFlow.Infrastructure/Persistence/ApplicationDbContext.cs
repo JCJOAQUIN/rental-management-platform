@@ -11,4 +11,6 @@ public class ApplicationDbContext : DbContext
 
     // Aquí registramos las tablas del sistema
     public DbSet<Tenant> Tenants { get; set; }
+    public DbSet<User> Users => Set<User>();
+
 }
