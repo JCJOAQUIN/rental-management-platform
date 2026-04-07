@@ -7,7 +7,7 @@ obj/
 *.userosscache
 *.sln.docstates
 out/
-appsettings.Example.json
+appsettings.json
 # (Opcional: ignora appsettings si prefieres usar variables de entorno)
 
 # === [ Angular / Node.js ] ===
@@ -36,3 +36,4 @@ Thumbs.db
 *.sln.docstates
 
 # === [ Docker ] ===
+src/backend/RentFlow.Backend/RentFlow.API/appsettings.json

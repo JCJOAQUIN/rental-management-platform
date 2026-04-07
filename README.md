@@ -10,18 +10,19 @@ Este proyecto ha sido desarrollado como una **solución de grado empresarial** p
 
 Seleccionado estratégicamente para maximizar la mantenibilidad y el rendimiento:
 
-- **Backend:** .NET 10 Web API
-- **Arquitectura:** Clean Architecture + Domain-Driven Design (DDD) Principles
-- **Frontend:** Angular 18 + Tailwind CSS
-- **Persistencia:** Entity Framework Core (SQL Server / PostgreSQL)
-- **Infraestructura:** Docker Containers & GitHub Actions (CI/CD)
+    - **Backend:** .NET 10 Web API
+    - **Arquitectura:** Clean Architecture + Domain-Driven Design (DDD) Principles
+    - **Frontend:** Angular 18 + Tailwind CSS
+    - **Persistencia:** Entity Framework Core (SQL Server / PostgreSQL)
+    - **Infraestructura:** Docker Containers & GitHub Actions (CI/CD)
 
 ---
 
 ## 🏗️ Características de Ingeniería (Enterprise Grade)
 
 ### 1. Arquitectura Multi-tenant Dinámica
-El sistema implementa un aislamiento de datos estricto mediante el uso de subdominios (ej. `cliente1.rentflow.com`). 
+El sistema implementa un aislamiento de datos estricto mediante el uso de subdominios (ej. `cliente1.rentflow.com`).
+ 
 - **Aislamiento a nivel de DB:** Todas las consultas incluyen filtros globales por `TenantId` aplicados en la capa de persistencia.
 - **Resolución de Inquilinos:** Middleware personalizado para la identificación automática del contexto del cliente en cada petición HTTP.
 
@@ -32,21 +33,48 @@ Algoritmo avanzado para la gestión de reservas que previene colisiones de fecha
 
 ## 📅 Hoja de Ruta de Desarrollo (Roadmap)
 
-1.  **Fase 1:** Configuración de Clean Architecture, Capa de Dominio y Seguridad JWT.
-2.  **Fase 2:** Implementación del Motor Multi-tenant y Gestión de Staff/Usuarios.
-3.  **Fase 3:** Catálogos de Inventario, Gestión de Clientes y Directorios.
-4.  **Fase 4:** Motor de Reservas, Calendarios Interactivos y Control de Disponibilidad.
-5.  **Fase 5:** Dashboard de Analítica (BI), Panel de SuperAdmin y Pipelines de DevOps.
-6.  **Fase 6:** Panel de Administración Global (SuperAdmin) y Pipelines de DevOps.
+    1.  **Fase 1:** Configuración de Clean Architecture, Capa de Dominio y Seguridad JWT.
+    2.  **Fase 2:** Implementación del Motor Multi-tenant y Gestión de Staff/Usuarios.
+    3.  **Fase 3:** Catálogos de Inventario, Gestión de Clientes y Directorios.
+    4.  **Fase 4:** Motor de Reservas, Calendarios Interactivos y Control de Disponibilidad.
+    5.  **Fase 5:** Dashboard de Analítica (BI), Panel de SuperAdmin y Pipelines de DevOps.
+    6.  **Fase 6:** Panel de Administración Global (SuperAdmin) y Pipelines de DevOps.
+
+---
+
+## 🛠️ Detalles de Implementación Técnica
+
+### Fase 1 Seguridad JWT
+
+#### Servicio de Token JWT
+Se ha implementado un servicio centralizado para la generación de tokens de seguridad basados en el estándar JWT (JSON Web Token). Este servicio es la pieza fundamental para la seguridad y el esquema Multi-Tenant de RentFlow.
+
+Ubicación de la Interfaz: RentFlow.Application/Interfaces/IJwtTokenGenerator.cs
+Ubicación de la Implementación: RentFlow.Infrastructure/Authentication/JwtTokenGenerator.cs.
+Responsabilidad: Transformar una entidad de usuario validada en una cadena de texto firmada criptográficamente.
+
+**Arquitectura de Capas:**
+
+    **Application:** Define la interfaz `IJwtTokenGenerator`, manteniendo la lógica de negocio desacoplada de la implementación tecnológica.
+
+    **Infrastructure:** Contiene la implementación concreta `JwtTokenGenerator` utilizando la librería `System.IdentityModel.Tokens.Jwt` para la firma criptográfica de los tokens.
+
+    **Estructura del Token (Claims):** Para garantizar el aislamiento de datos entre clientes (Multi-tenancy), cada token emitido incluye los siguientes datos incrustados:
+        * `sub`: Identificador único del usuario (Guid).
+        * `email`: Identidad del usuario para sesiones activas.
+        * `role`: Nivel de acceso dentro de la plataforma (Admin, Staff).
+        * `tenantId`: **Clave de Aislamiento.** Este ID permite que el sistema filtre automáticamente los datos para que un negocio nunca vea la información de otro.
+
+    **Seguridad:** El sistema utiliza el algoritmo **HMAC SHA256** para la firma de tokens. Los parámetros sensibles (Secret Key, Issuer, Audience) se gestionan de forma segura fuera del control de versiones mediante el uso de `appsettings.json` local y secrets de servidor (ver appsettings.Example.json para referencia de configuración local).
 
 ---
 
 ## 🚀 Guía de Instalación Local
 
 ### Requisitos Previos
-- .NET 10 SDK
-- Node.js v20+
-- Docker Desktop
+    - .NET 10 SDK
+    - Node.js v20+
+    - Docker Desktop
 
 ### Pasos para Ejecutar
 1. **Clonar el repositorio:**
@@ -97,4 +125,4 @@ Conventional Commits: Historial de Git legible y estandarizado.
 
 Clean Code: Enfoque en legibilidad y reducción de deuda técnica.
 
-Desarrollado por Jose Carlos Joaquín Vazquez | Ingeniero en Sistemas Computacionales | Especialista en desarrollo de software
+Desarrollado por José Carlos Joaquín Vazquez | Ingeniero en Sistemas Computacionales | Especialista en desarrollo de software
