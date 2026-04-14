@@ -19,7 +19,7 @@ namespace RentFlow.Infrastructure.Authentication
             _config = config;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(Guid userId, string email, string role, Guid tenantId)
         {
             var jwtSettings = _config.GetSection("JwtSettings");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!));
@@ -28,10 +28,10 @@ namespace RentFlow.Infrastructure.Authentication
             // Definimos los "Claims" (información que viaja dentro del token)
             var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new(JwtRegisteredClaimNames.Email, user.Email),
-                new("role", user.Role),
-                new("tenantId", user.TenantId.ToString()) // Clave para el esquema Multi-Tenant [cite: 89]
+                new(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new(JwtRegisteredClaimNames.Email, email),
+                new("role", role),
+                new("tenantId", tenantId.ToString()) // Clave para el esquema Multi-Tenant
             };
 
             var token = new JwtSecurityToken(
